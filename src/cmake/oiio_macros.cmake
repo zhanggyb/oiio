@@ -98,8 +98,8 @@ macro (oiio_add_tests)
         # Add the tests if all is well.
         set (_has_generator_expr TRUE)
         foreach (_testname ${_ats_UNPARSED_ARGUMENTS})
-            set (_testsrcdir "${CMAKE_SOURCE_DIR}/testsuite/${_testname}")
-            set (_testdir "${CMAKE_BINARY_DIR}/testsuite/${_testname}")
+            set (_testsrcdir "${PROJECT_SOURCE_DIR}/testsuite/${_testname}")
+            set (_testdir "${PROJECT_BINARY_DIR}/testsuite/${_testname}")
             if (_ats_TESTNAME)
                 set (_testname "${_ats_TESTNAME}")
             endif ()
@@ -107,10 +107,10 @@ macro (oiio_add_tests)
                 set (_testname "${_testname}-broken")
             endif ()
 
-            set (_runtest python "${CMAKE_SOURCE_DIR}/testsuite/runtest.py" ${_testdir})
+            set (_runtest python "${PROJECT_SOURCE_DIR}/testsuite/runtest.py" ${_testdir})
             if (MSVC_IDE)
                 set (_runtest ${_runtest} --devenv-config $<CONFIGURATION>
-                                          --solution-path "${CMAKE_BINARY_DIR}" )
+                                          --solution-path "${PROJECT_BINARY_DIR}" )
             endif ()
 
             file (MAKE_DIRECTORY "${_testdir}")

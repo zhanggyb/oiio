@@ -31,10 +31,10 @@ set (OIIO_VERSION_RELEASE_TYPE ${PROJECT_VERSION_RELEASE_TYPE})
 if (VERBOSE)
     message (STATUS "Project source dir = ${PROJECT_SOURCE_DIR}")
 endif ()
-message (STATUS "Project build dir   = ${CMAKE_BINARY_DIR}")
+message (STATUS "Project build dir   = ${PROJECT_BINARY_DIR}")
 message (STATUS "Project install dir = ${CMAKE_INSTALL_PREFIX}")
 
-if ("${PROJECT_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+if ("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
     message (FATAL_ERROR "Not allowed to run in-source build!")
 endif ()
 
@@ -223,13 +223,13 @@ add_subdirectory (src/nuke)
 
 # Make a build/platform/testsuite directory, and copy the master runtest.py
 # there. The rest is up to the tests themselves.
-file (MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/testsuite")
-add_custom_command (OUTPUT "${CMAKE_BINARY_DIR}/testsuite/runtest.py"
+file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/testsuite")
+add_custom_command (OUTPUT "${PROJECT_BINARY_DIR}/testsuite/runtest.py"
                     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                        "${CMAKE_SOURCE_DIR}/testsuite/runtest.py"
-                        "${CMAKE_BINARY_DIR}/testsuite/runtest.py"
-                    MAIN_DEPENDENCY "${CMAKE_SOURCE_DIR}/testsuite/runtest.py")
-add_custom_target ( CopyFiles ALL DEPENDS "${CMAKE_BINARY_DIR}/testsuite/runtest.py" )
+                        "${PROJECT_SOURCE_DIR}/testsuite/runtest.py"
+                        "${PROJECT_BINARY_DIR}/testsuite/runtest.py"
+                    MAIN_DEPENDENCY "${PROJECT_SOURCE_DIR}/testsuite/runtest.py")
+add_custom_target ( CopyFiles ALL DEPENDS "${PROJECT_BINARY_DIR}/testsuite/runtest.py" )
 
 # Basic tests that apply even to continuous integration tests:
 oiio_add_tests (
@@ -365,12 +365,12 @@ set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "OpenImageIO is an open source library fo
 set (CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/src/doc/Description.txt")
 set (CPACK_PACKAGE_FILE_NAME ${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}-${platform})
 #SET (CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJECT_SOURCE_DIR}")
-file (MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/cpack")
-file (COPY "${PROJECT_SOURCE_DIR}/LICENSE" DESTINATION "${CMAKE_BINARY_DIR}/cpack")
-file (RENAME "${CMAKE_BINARY_DIR}/cpack/LICENSE" "${CMAKE_BINARY_DIR}/cpack/License.txt")
-set (CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/cpack/License.txt")
-file (COPY "${PROJECT_SOURCE_DIR}/README.md" DESTINATION "${CMAKE_BINARY_DIR}/cpack")
-set (CPACK_RESOURCE_FILE_README "${CMAKE_BINARY_DIR}/cpack/README.md")
+file (MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/cpack")
+file (COPY "${PROJECT_SOURCE_DIR}/LICENSE" DESTINATION "${PROJECT_BINARY_DIR}/cpack")
+file (RENAME "${PROJECT_BINARY_DIR}/cpack/LICENSE" "${PROJECT_BINARY_DIR}/cpack/License.txt")
+set (CPACK_RESOURCE_FILE_LICENSE "${PROJECT_BINARY_DIR}/cpack/License.txt")
+file (COPY "${PROJECT_SOURCE_DIR}/README.md" DESTINATION "${PROJECT_BINARY_DIR}/cpack")
+set (CPACK_RESOURCE_FILE_README "${PROJECT_BINARY_DIR}/cpack/README.md")
 set (CPACK_RESOURCE_FILE_WELCOME "${PROJECT_SOURCE_DIR}/src/doc/Welcome.txt")
 #SET (CPACK_STRIP_FILES Do we need this?)
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
